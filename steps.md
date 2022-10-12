@@ -18,6 +18,53 @@ STEP 2
 ----------------------------------------
 create a .env file 
 give PORT= ? a value
+create index.js
+create api folder 
+create server.js in api folder
+create recipes folder
+create recipes-router.js && middleware && model
 
 STEP 3
 ----------------------------------------
+in index.js{
+    require('dotenv').config()
+
+    const server = require('./api/server.js');
+
+    const PORT = process.env.PORT || 9000;
+
+    server.listen(PORT, () => {
+    console.log(`Listening on port ${PORT}...`);
+    });
+}
+
+in server.js{
+    const express = require('express');
+    const helmet = require('helmet');
+    const recipesRouter = require('./recipes/recipes-router');
+
+    const server = express();
+
+    server.use(helmet());
+    server.use(express.json());
+    server.use('/api/recipes', recipesRouter);
+
+    server.use((err, req, res, next) => { // eslint-disable-line
+    res.status(500).json({
+        message: err.message,
+        stack: err.stack,
+    });
+    });
+
+    module.exports = server;
+}
+
+in recipes-router{
+    const router = require('express').Router()
+
+    router.use('*', (req, res, err, next) =>{
+        res.json({ api: 'up' })
+    })
+
+    module.exports = router;
+}
