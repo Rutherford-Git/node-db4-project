@@ -68,3 +68,14 @@ in recipes-router{
 
     module.exports = router;
 }
+
+in .gitignore file{
+ ...
+ //in the bottom of the file
+ .vscode
+}
+
+STEP 4
+----------------------------------------
+F5 to run debugger
+
