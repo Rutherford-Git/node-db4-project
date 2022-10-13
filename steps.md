@@ -17,7 +17,10 @@ install all on these dependencies:
 STEP 2
 ----------------------------------------
 create a .env file 
+in .env file{
 give PORT= ? a value
+NODE_ENV=development
+}
 create index.js
 create api folder 
 create server.js in api folder
@@ -78,4 +81,54 @@ in .gitignore file{
 STEP 4
 ----------------------------------------
 F5 to run debugger
+
+STEP 5
+----------------------------------------
+create knexfile.js
+
+in knexfile{
+const sharedConfig = {
+    client: 'sqlite3',
+    migrations: { directory: './data/migration' },
+    seeds: { directory: './data/seeds'},
+    useNullAsDefault: true,
+    pool: { afterCreate: (conn, done) => conn.run('PRAGMA foreign_keys = ON', done) },
+    }
+
+module.exports = {
+    development: {
+        ...sharedConfig,
+        connection: { filename: './data/cook_book.db3'},
+        },
+
+    testing: {
+        ...sharedConfig,
+        connection: { filename: './data/cook_book.test.db3'},
+        },
+
+    production: {
+
+        }
+}
+
+STEP 6
+----------------------------------------
+create data folder
+create db-config.js file
+
+in db-config{
+    const knex = require('knex');
+
+    const config = require('../knexfile.js');
+
+    const environment = process.env.NODE_ENV
+
+    module.exports = knex(config.development[environment]);
+}
+
+STEP 7
+----------------------------------------
+npx knex migrate:make initial-migration
+
+set functions to async
 
